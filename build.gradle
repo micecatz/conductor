@@ -1,23 +1,27 @@
 buildscript {
-	
-	repositories {
-        jcenter()
+
+    repositories {
+        mavenLocal()
+        maven {
+            url "http://central.maven.org/maven2/"
+        }
     }
-    
+
     dependencies {
         classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.0.3'
         classpath 'org.apache.ant:ant:1.9.7'
+        classpath 'com.netflix.nebula:gradle-netflixoss-project-plugin:3.6.0'
     }
 }
-plugins {
-    id 'nebula.netflixoss' version '3.6.0'
-}
+//plugins {
+//    id 'nebula.netflixoss' version '3.6.0'
+//}
 
 // Establish version and status
 ext.githubProjectName = rootProject.name // Change if github project name is not the same as the root project's name
 
 apply plugin: 'project-report'
-
+apply plugin: 'nebula.netflixoss'
 
 subprojects {
 
@@ -32,27 +36,30 @@ subprojects {
     targetCompatibility = 1.8
 
     repositories {
-        jcenter()
+        mavenLocal()
+        maven {
+            url "http://central.maven.org/maven2/"
+        }
     }
 
     dependencies {
-    	testCompile 'junit:junit-dep:4.10'
-    	testCompile 'org.mockito:mockito-all:1.10.0'
+        testCompile 'junit:junit-dep:4.10'
+        testCompile 'org.mockito:mockito-all:1.10.0'
     }
 
     group = "com.netflix.${githubProjectName}"
-    
+
     tasks.withType(Test)  {
         maxParallelForks = 100
     }
-    
+
     license {
-		excludes(['**/*.txt', '**/*.conf', '**/*.properties', '**/*.json', '**/swagger-ui/*'])
-	}
-	
-	task licenseFormatTests (type:nl.javadude.gradle.plugins.license.License) {
-    	source = fileTree(dir: "src/test").include("**/*")
-	}
-	licenseFormat.dependsOn licenseFormatTests
+        excludes(['**/*.txt', '**/*.conf', '**/*.properties', '**/*.json', '**/swagger-ui/*'])
+    }
+
+    task licenseFormatTests (type:nl.javadude.gradle.plugins.license.License) {
+        source = fileTree(dir: "src/test").include("**/*")
+    }
+    licenseFormat.dependsOn licenseFormatTests
 
 }
