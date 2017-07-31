@@ -87,6 +87,5 @@ task server(type: JavaExec) {
     systemProperty 'workflow.elasticsearch.url', 'sscpap02.svr.us.jpmchase.net:9300'
     systemProperty 'loadSample', 'true'
     main = 'com.netflix.conductor.server.Main'
-    args 'C:\\FAST\\IdeaProjects\\conductor\\server\\src\\main\\resources\\server.properties'
     classpath = sourceSets.test.runtimeClasspath
 }
