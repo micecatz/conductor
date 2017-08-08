@@ -49,6 +49,34 @@ dependencies {
 
     //In memory
     compile 'org.rarefiedredis.redis:redis-java:0.0.17'
+
+    //Janus
+    compile 'com.jpmorgan.janussso:janus-sdk:4.0.0.0'
+
+    //Ehcache
+    compile 'org.ehcache:ehcache:3.1.3'
+
+    //Conductor
+    compile project(':conductor-core')
+    compile project(':conductor-jersey')
+    compile project(':conductor-redis-persistence')
+    compile project(':conductor-contribs')
+
+    //Jetty
+    compile 'org.eclipse.jetty:jetty-server:9.3.9.+'
+    compile 'org.eclipse.jetty:jetty-servlet:9.3.9.+'
+
+    //Guice
+    compile 'com.sun.jersey.contribs:jersey-guice:1.19.+'
+    compile 'com.google.inject:guice:4.+'
+    compile 'com.google.inject.extensions:guice-servlet:4.1.+'
+    compile 'com.sun.jersey.contribs:jersey-multipart:1.18'
+
+    //Swagger
+    compile 'io.swagger:swagger-jersey-jaxrs:1.5.0'
+
+    //In memory
+    compile 'org.rarefiedredis.redis:redis-java:0.0.17'
 }
 
 shadowJar {
@@ -84,8 +112,9 @@ configurations.grettyRunnerTomcat8 {
 build.dependsOn('shadowJar')
 
 task server(type: JavaExec) {
-    systemProperty 'workflow.elasticsearch.url', 'localhost:9300'
+    systemProperty 'workflow.elasticsearch.url', 'sscpap02.svr.us.jpmchase.net:9300'
     systemProperty 'loadSample', 'true'
     main = 'com.netflix.conductor.server.Main'
+    args 'C:\\Intellij_Repository\\SCPP_Repository\\conductor-master\\conductor\\server\\src\\main\\resources\\server.properties'
     classpath = sourceSets.test.runtimeClasspath
 }
