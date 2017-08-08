@@ -55,28 +55,6 @@ dependencies {
 
     //Ehcache
     compile 'org.ehcache:ehcache:3.1.3'
-
-    //Conductor
-    compile project(':conductor-core')
-    compile project(':conductor-jersey')
-    compile project(':conductor-redis-persistence')
-    compile project(':conductor-contribs')
-
-    //Jetty
-    compile 'org.eclipse.jetty:jetty-server:9.3.9.+'
-    compile 'org.eclipse.jetty:jetty-servlet:9.3.9.+'
-
-    //Guice
-    compile 'com.sun.jersey.contribs:jersey-guice:1.19.+'
-    compile 'com.google.inject:guice:4.+'
-    compile 'com.google.inject.extensions:guice-servlet:4.1.+'
-    compile 'com.sun.jersey.contribs:jersey-multipart:1.18'
-
-    //Swagger
-    compile 'io.swagger:swagger-jersey-jaxrs:1.5.0'
-
-    //In memory
-    compile 'org.rarefiedredis.redis:redis-java:0.0.17'
 }
 
 shadowJar {
