@@ -3,8 +3,8 @@ package com.netflix.conductor.server.auth;
 import com.jpmorgan.janus.client.JanusClient;
 import com.jpmorgan.janus.client.JanusClientSession;
 
-import com.netflix.conductor.server.EhCacheConfig;
-import org.apache.commons.lang.StringUtils;
+import com.netflix.conductor.server.GuavaCacheUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,30 +13,31 @@ import javax.servlet.http.HttpServletResponse;
 
 public final class JanusAuthenticator implements Authenticator {
 
-    private EhCacheConfig ehCacheConfig;
+    private GuavaCacheUtil guavaCacheUtil;
 
     //        private static final String JANUS_APPLICATION_KEY = System.getenv("JANUS_APPLICATION_KEY");
 //    private static final String JANUS_AUTH_URL = System.getenv("JANUS_AUTH_URL");
     private static final String JANUS_APPLICATION_KEY = "859C3EE3-8FA8-7BF1-A47B-6C8DBC1F1B2B";
     private static final String JANUS_AUTH_URL = "https://janus-sso-uat.jpmorgan.com/authz/action/authorize";
 
-    public JanusAuthenticator(EhCacheConfig ehCacheConfig) {
-        this.ehCacheConfig = ehCacheConfig;
+    public JanusAuthenticator(GuavaCacheUtil guavaCacheUtil) {
+        this.guavaCacheUtil = guavaCacheUtil;
     }
 
     @Override
     public AuthenticationResult authenticateViaToken(String janusToken) {
-        if (ehCacheConfig.getTokenCache().containsKey(janusToken) && ehCacheConfig.getTokenCache().get(janusToken)) {
+        try {
+            if (guavaCacheUtil.getTokenCache(janusToken)) {
             return new AuthenticationResult(HttpServletResponse.SC_OK);
         }
+        Thread.sleep(2000);
         if (StringUtils.isEmpty(janusToken)) {
             return new AuthenticationResult(HttpServletResponse.SC_UNAUTHORIZED, "Janus token is not set");
         }
-        try {
             JanusClientSession session = JanusClient.createSession(JANUS_APPLICATION_KEY, null, null);
             authenticateSession(session, janusToken);
             authoriseSession(session);
-            ehCacheConfig.getTokenCache().put(janusToken, true);
+            guavaCacheUtil.insertTokenCache(janusToken, true);
             return new AuthenticationResult(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             return new AuthenticationResult(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());

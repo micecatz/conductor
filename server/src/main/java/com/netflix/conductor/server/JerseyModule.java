@@ -55,7 +55,7 @@ import javax.servlet.http.HttpServletResponse;
 public final class JerseyModule extends JerseyServletModule {
 
 	private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(JerseyModule.class);
-	private EhCacheConfig ehCacheConfig = new EhCacheConfig();
+	private GuavaCacheUtil guavaCacheUtil = new GuavaCacheUtil();
 
 	@Override
 	protected void configureServlets() {
@@ -132,7 +132,7 @@ public final class JerseyModule extends JerseyServletModule {
 		Enumeration<String> headers = httpRequest.getHeaderNames();
 		if (Collections.list(headers).stream().anyMatch(header -> header.equals(ContainerRequest.COOKIE))) {
 			String authenticationToken = httpRequest.getHeader(ContainerRequest.COOKIE);
-			Authenticator authenticator = new JanusAuthenticator(ehCacheConfig);
+			Authenticator authenticator = new JanusAuthenticator(guavaCacheUtil);
 			return authenticator.authenticateViaToken(authenticationToken);
 		}
 		return new AuthenticationResult(HttpServletResponse.SC_UNAUTHORIZED, "No authentication information specified");
