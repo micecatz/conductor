@@ -90,9 +90,8 @@ configurations.grettyRunnerTomcat8 {
 build.dependsOn('shadowJar')
 
 task server(type: JavaExec) {
-    systemProperty 'workflow.elasticsearch.url', 'sscpap02.svr.us.jpmchase.net:9300'
+    systemProperty 'workflow.elasticsearch.url', 'localhost:9300'
     systemProperty 'loadSample', 'true'
     main = 'com.netflix.conductor.server.Main'
-    args 'C:\\Intellij_Repository\\SCPP_Repository\\conductor-master\\conductor\\server\\src\\main\\resources\\server.properties'
     classpath = sourceSets.test.runtimeClasspath
 }
